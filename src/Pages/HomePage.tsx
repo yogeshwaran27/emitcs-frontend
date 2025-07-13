@@ -1,47 +1,57 @@
+import React from 'react';
+import { Button, Typography } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Typography, Card } from 'antd';
-import { CopyOutlined } from '@ant-design/icons';
+import styles from '../styles/HomePage.module.scss';
+import Homebg from '../assets/home.jpg';
+const { Title, Text } = Typography;
 
-const { Title, Text, Paragraph } = Typography;
-
-const HomePage = () => {
-  const accessToken = Cookies.get('access_token');
+const HomePage: React.FC = () => {
+  const navigate = useNavigate();
+  const token = Cookies.get('access_token');
 
   return (
-    <div style={{ padding: '40px', display: 'flex', justifyContent: 'center' }}>
-      <Card
-        title={<Title level={3}>Welcome to Home Page</Title>}
-        bordered={false}
-        style={{ maxWidth: 800, width: '100%' }}
-      >
-        {accessToken ? (
-          <>
-            <Paragraph>
-              <Text strong>Your Access Token:</Text>
-            </Paragraph>
-            <Paragraph
-              copyable={{
-                text: accessToken,
-                tooltips: ['Copy token', 'Token copied'],
-                icon: <CopyOutlined />,
-              }}
-              style={{
-                background: '#f5f5f5',
-                padding: '12px',
-                border: '1px solid #d9d9d9',
-                borderRadius: '6px',
-                wordBreak: 'break-word',
-              }}
-            >
-              <Text code>{accessToken}</Text>
-            </Paragraph>
+    <div className={styles.container}>
+      <div className={styles.leftHalf} style={{ backgroundImage: `url(${Homebg})` }}>
+        {/* Could add a background image or color */}
+      </div>
 
-            
-          </>
-        ) : (
-          <Text type="danger">No access token found in cookies.</Text>
-        )}
-      </Card>
+      <div className={styles.rightHalf}>
+        {/* Animated background circles */}
+        <div className={styles.circle} style={{ animationDelay: '0s' }}></div>
+        <div className={styles.circle} style={{ animationDelay: '2s' }}></div>
+        <div className={styles.circle} style={{ animationDelay: '4s' }}></div>
+        <div className={styles.circle} style={{ animationDelay: '1s' }}></div>
+        <div className={styles.circle} style={{ animationDelay: '3s' }}></div>
+
+        <div className={styles.content}>
+          <Title level={2}>Welcome to the Time Sheet Portal</Title>
+
+          {!token ? (
+            <>
+              <Text className={styles.signinMessage}>Sign in to view your portal</Text>
+              <Button
+                type="primary"
+                size="large"
+                onClick={() => navigate('/login')}
+              >
+                Sign In
+              </Button>
+            </>
+          ) : (
+            <>
+              <Text className={styles.signinMessage}>Ready to manage your time sheets</Text>
+              <Button
+                type="primary"
+                size="large"
+                onClick={() => navigate('/timesheet')}
+              >
+                Go to Time Sheet Portal
+              </Button>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

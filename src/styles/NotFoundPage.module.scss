@@ -1,0 +1,23 @@
+.notFoundWrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f2f5;
+  text-align: center;
+  padding: 20px;
+}
+
+.content {
+  background: white;
+  padding: 40px 60px;
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.message {
+  display: block;
+  margin-bottom: 24px;
+  font-size: 18px;
+  color: #595959;
+}

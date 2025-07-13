@@ -1,2 +1,1 @@
-export const FrontendURL="http://localhost:5173"
-export const apiURL="http://localhost:3000/api"
+export const apiURL="http://3.144.115.249/api"
