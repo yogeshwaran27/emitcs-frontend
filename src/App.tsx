@@ -22,7 +22,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<PublicRoute><HomePage /></PublicRoute>} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<PublicRoute><LoginForm /></PublicRoute>} />
         <Route path="/first-reset-pass" element={<FirstResetPassRedirect />} />
         <Route path="/timesheet" element={<ProtectedRoute><TimesheetPage /></ProtectedRoute>} />

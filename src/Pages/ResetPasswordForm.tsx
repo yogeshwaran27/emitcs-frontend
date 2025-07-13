@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Typography, Card, message } from 'antd';
+import { Form, Input, Button, Typography, Card, message, Layout } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/interceptor';
 import Cookies from 'js-cookie';
-import styles from '../styles/ResetPasswordForm.module.scss'; 
+import styles from '../styles/ResetPasswordForm.module.scss';
+import HeaderBar from '../components/HeaderBar';
+import { Content } from 'antd/es/layout/layout';
 
 const { Title, Text } = Typography;
 
@@ -45,54 +47,58 @@ const ResetPasswordForm: React.FC = () => {
   };
 
   return (
-    <div className={styles.resetPasswordWrapper}>
-      <Card className={styles.resetCard}>
-        <div className={styles.textCenter}>
-          <Title level={4}>Reset Password</Title>
-          <Text type="secondary">Set a new password for your account</Text>
-        </div>
+    <Layout className={styles.homeLayout}>
+      <HeaderBar />
+      <Content className={styles.contentWrapper}>
+        <Card className={styles.resetCard}>
+          <div className={styles.textCenter}>
+            <Title level={4}>Reset Password</Title>
+            <Text type="secondary">Set a new password for your account</Text>
+          </div>
 
-        <Form layout="vertical" onFinish={onFinish}>
-          <Form.Item
-            label="New Password"
-            name="password"
-            rules={[{ required: true, message: 'Please enter a new password!' }]}
-          >
-            <Input.Password
-              placeholder="New Password"
-              iconRender={(visible) =>
-                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-              }
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Confirm Password"
-            name="confirmPassword"
-            rules={[{ required: true, message: 'Please confirm your password!' }]}
-          >
-            <Input.Password
-              placeholder="Confirm Password"
-              iconRender={(visible) =>
-                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-              }
-            />
-          </Form.Item>
-
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              block
-              loading={loading}
-              disabled={loading}
+          <Form layout="vertical" onFinish={onFinish}>
+            <Form.Item
+              label="New Password"
+              name="password"
+              rules={[{ required: true, message: 'Please enter a new password!' }]}
             >
-              Update Password
-            </Button>
-          </Form.Item>
-        </Form>
-      </Card>
-    </div>
+              <Input.Password
+                placeholder="New Password"
+                iconRender={(visible) =>
+                  visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                }
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Confirm Password"
+              name="confirmPassword"
+              rules={[{ required: true, message: 'Please confirm your password!' }]}
+            >
+              <Input.Password
+                placeholder="Confirm Password"
+                iconRender={(visible) =>
+                  visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                }
+              />
+            </Form.Item>
+
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                block
+                loading={loading}
+                disabled={loading}
+              >
+                Update Password
+              </Button>
+            </Form.Item>
+          </Form>
+        </Card>
+      </Content>
+
+    </Layout>
   );
 };
 
