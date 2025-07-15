@@ -13,6 +13,7 @@ const { Title, Text } = Typography;
 const ResetPasswordForm: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const email = Cookies.get('mail');
   const [password, setPassword] = useState('');
@@ -32,6 +33,7 @@ const ResetPasswordForm: React.FC = () => {
     },
   ];
   const isPasswordStrong = passwordValidations.every((rule) => rule.isValid);
+  
   if (!email) {
     message.error('Missing email. Please login again.');
     navigate('/login');
@@ -39,7 +41,7 @@ const ResetPasswordForm: React.FC = () => {
   }
 
   const onFinish = async (values: any) => {
-    if (values.password !== values.confirmPassword) {
+    if (password !== confirmPassword) {
       message.error('Passwords do not match');
       return;
     }
@@ -76,7 +78,6 @@ const ResetPasswordForm: React.FC = () => {
             <Form.Item
               label="New Password"
               name="password"
-              rules={[{ required: true, message: 'Please enter a new password!' }]}
             >
               <>
                 <Input.Password
@@ -114,6 +115,7 @@ const ResetPasswordForm: React.FC = () => {
               label="Confirm Password"
               name="confirmPassword"
               dependencies={['password']}
+              
               rules={[
                 {
                   validator: (_, value, callback) => {
@@ -133,6 +135,8 @@ const ResetPasswordForm: React.FC = () => {
             >
               <Input.Password
                 placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 iconRender={(visible) =>
                   visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                 }
@@ -146,7 +150,7 @@ const ResetPasswordForm: React.FC = () => {
                 htmlType="submit"
                 block
                 loading={loading}
-                disabled={loading || !isPasswordStrong}
+                disabled={loading || !isPasswordStrong || (password!=confirmPassword)}
               >
                 Update Password
               </Button>
