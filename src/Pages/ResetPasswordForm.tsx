@@ -15,7 +15,23 @@ const ResetPasswordForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const email = Cookies.get('mail');
+  const [password, setPassword] = useState('');
 
+  const passwordValidations = [
+    {
+      label: 'At least 8 characters',
+      isValid: password.length >= 8,
+    },
+    {
+      label: 'Contains at least 1 number',
+      isValid: /\d/.test(password),
+    },
+    {
+      label: 'Contains at least 1 special character',
+      isValid: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+    },
+  ];
+  const isPasswordStrong = passwordValidations.every((rule) => rule.isValid);
   if (!email) {
     message.error('Missing email. Please login again.');
     navigate('/login');
@@ -62,18 +78,58 @@ const ResetPasswordForm: React.FC = () => {
               name="password"
               rules={[{ required: true, message: 'Please enter a new password!' }]}
             >
-              <Input.Password
-                placeholder="New Password"
-                iconRender={(visible) =>
-                  visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-                }
-              />
+              <>
+                <Input.Password
+                  placeholder="New Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  iconRender={(visible) =>
+                    visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                  }
+                />
+                {password && (
+                  <div style={{ marginTop: '8px' }}>
+                    {passwordValidations.map((rule, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          color: rule.isValid ? 'green' : 'red',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                        }}
+                      >
+                        <span>{rule.isValid ? '✅' : '❌'}</span>
+                        <span>{rule.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+              </>
             </Form.Item>
+
 
             <Form.Item
               label="Confirm Password"
               name="confirmPassword"
-              rules={[{ required: true, message: 'Please confirm your password!' }]}
+              dependencies={['password']}
+              rules={[
+                {
+                  validator: (_, value, callback) => {
+                    if (!password) {
+                      return Promise.resolve();
+                    }
+                    if (!value) {
+                      return Promise.reject(new Error('Please confirm your password!'));
+                    }
+                    if (value !== password) {
+                      return Promise.reject(new Error('Passwords do not match'));
+                    }
+                    return Promise.resolve();
+                  },
+                },
+              ]}
             >
               <Input.Password
                 placeholder="Confirm Password"
@@ -83,16 +139,18 @@ const ResetPasswordForm: React.FC = () => {
               />
             </Form.Item>
 
+
             <Form.Item>
               <Button
                 type="primary"
                 htmlType="submit"
                 block
                 loading={loading}
-                disabled={loading}
+                disabled={loading || !isPasswordStrong}
               >
                 Update Password
               </Button>
+
             </Form.Item>
           </Form>
         </Card>

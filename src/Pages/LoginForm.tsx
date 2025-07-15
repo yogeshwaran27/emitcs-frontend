@@ -79,15 +79,6 @@ const LoginForm: React.FC = () => {
           </Form.Item>
 
           <Form.Item>
-            <div className="flex justify-between items-center">
-              <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>Remember me</Checkbox>
-              </Form.Item>
-              <a href="#">Forgot password?</a>
-            </div>
-          </Form.Item>
-
-          <Form.Item>
             <Button
               type="primary"
               htmlType="submit"
