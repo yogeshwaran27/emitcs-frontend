@@ -51,7 +51,7 @@ const ResetPasswordForm: React.FC = () => {
     try {
       await axiosInstance.put('/users/reset-password', {
         email,
-        newPassword: values.password,
+        newPassword: password,
       });
 
       message.success('Password updated successfully. Please log in.');
