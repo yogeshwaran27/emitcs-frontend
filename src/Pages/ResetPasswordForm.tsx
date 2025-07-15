@@ -3,10 +3,10 @@ import { Form, Input, Button, Typography, Card, message, Layout } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/interceptor';
-import Cookies from 'js-cookie';
 import styles from '../styles/ResetPasswordForm.module.scss';
 import HeaderBar from '../components/HeaderBar';
 import { Content } from 'antd/es/layout/layout';
+import { useUser } from '../context/UserContext';
 
 const { Title, Text } = Typography;
 
@@ -15,7 +15,7 @@ const ResetPasswordForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const email = Cookies.get('mail');
+  const { mail } = useUser();
   const [password, setPassword] = useState('');
 
   const passwordValidations = [
@@ -33,8 +33,8 @@ const ResetPasswordForm: React.FC = () => {
     },
   ];
   const isPasswordStrong = passwordValidations.every((rule) => rule.isValid);
-  
-  if (!email) {
+
+  if (!mail) {
     message.error('Missing email. Please login again.');
     navigate('/login');
     return null;
@@ -49,10 +49,7 @@ const ResetPasswordForm: React.FC = () => {
     setLoading(true);
 
     try {
-      await axiosInstance.put('/users/reset-password', {
-        email,
-        newPassword: password,
-      });
+      await axiosInstance.put('/users/reset-password', {newPassword: password});
 
       message.success('Password updated successfully. Please log in.');
       navigate('/login');
@@ -115,7 +112,7 @@ const ResetPasswordForm: React.FC = () => {
               label="Confirm Password"
               name="confirmPassword"
               dependencies={['password']}
-              
+
               rules={[
                 {
                   validator: (_, value, callback) => {
@@ -150,7 +147,7 @@ const ResetPasswordForm: React.FC = () => {
                 htmlType="submit"
                 block
                 loading={loading}
-                disabled={loading || !isPasswordStrong || (password!=confirmPassword)}
+                disabled={loading || !isPasswordStrong || (password != confirmPassword)}
               >
                 Update Password
               </Button>

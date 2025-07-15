@@ -2,16 +2,17 @@ import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { message } from 'antd';
 import axiosInstance from '../api/interceptor'; // Update path if necessary
+import { useUser } from '../context/UserContext';
 
 const FirstResetPassRedirect: React.FC = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-
+    const { setUser } = useUser();
     useEffect(() => {
         const token = searchParams.get('token');
         const email = searchParams.get('email');
-
-        if (!token || !email) {
+        const name = searchParams.get('name');
+        if (!token || !email || !name) {
             message.error('Invalid password reset link.');
             navigate('/login');
             return;
@@ -22,9 +23,11 @@ const FirstResetPassRedirect: React.FC = () => {
                 const response = await axiosInstance.post('/auth/reset-token-store', {
                     token,
                     email,
+                    name
                 });
 
                 if (response.status === 200) {
+                    setUser({ mail: email, name: name });
                     navigate('/reset-password');
                 } else {
                     message.error('Token validation failed.');

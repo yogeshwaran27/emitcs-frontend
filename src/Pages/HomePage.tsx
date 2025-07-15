@@ -1,14 +1,14 @@
 import React from 'react';
 import { Button, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import styles from '../styles/HomePage.module.scss';
 import Homebg from '../assets/home.jpg';
+import { useUser } from '../context/UserContext';
 const { Title, Text } = Typography;
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const token = Cookies.get('access_token');
+  const { mail } = useUser();
 
   return (
     <div className={styles.container}>
@@ -27,7 +27,7 @@ const HomePage: React.FC = () => {
         <div className={styles.content}>
           <Title level={2}>Welcome to the Time Sheet Portal</Title>
 
-          {!token ? (
+          {!mail ? (
             <>
               <Text className={styles.signinMessage}>Sign in to view your portal</Text>
               <Button

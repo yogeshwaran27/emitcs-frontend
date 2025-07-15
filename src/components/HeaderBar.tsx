@@ -1,19 +1,20 @@
 import React from 'react';
-import Cookies from 'js-cookie';
 import { Layout, Menu, Dropdown, Avatar, message } from 'antd';
 import { LogoutOutlined, KeyOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/interceptor';
 import styles from '../styles/Header.module.scss';
+import { useUser } from '../context/UserContext';
 
 const { Header } = Layout;
 
 const HeaderBar: React.FC = () => {
   const navigate = useNavigate();
-  const userEmail = Cookies.get('mail');
+  const { name,setUser } = useUser();
 
   const handleLogout = async () => {
     try {
+      setUser({ mail: null, name: null });
       await axiosInstance.post('/auth/logout');
       message.success('Logged out successfully');
       navigate('/login');
@@ -41,10 +42,10 @@ const HeaderBar: React.FC = () => {
   return (
     <Header className={styles.headerBar}>
       <div style={{ fontWeight: 'bold', fontSize: 18 }}>EMITCS Portal</div>
-      {userEmail && (
+      {name && (
         <Dropdown overlay={menu} trigger={['click']}>
           <Avatar style={{ backgroundColor: '#1890ff', cursor: 'pointer' }}>
-            {userEmail.charAt(0).toUpperCase()}
+            {name.charAt(0).toUpperCase()}
           </Avatar>
         </Dropdown>
       )}

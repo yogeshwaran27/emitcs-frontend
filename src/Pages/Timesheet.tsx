@@ -1,15 +1,15 @@
 import React from 'react';
-import Cookies from 'js-cookie';
 import { Layout, Typography, Card } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import HeaderBar from '../components/HeaderBar';
 import styles from '../styles/Timesheet.module.scss';
+import { useUser } from '../context/UserContext';
 
 const { Content } = Layout;
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text } = Typography;
 
 const TimesheetPage: React.FC = () => {
-  const accessToken = Cookies.get('access_token');
+  const { mail, name } = useUser();
 
   return (
     <Layout className={styles.homeLayout}>
@@ -20,24 +20,12 @@ const TimesheetPage: React.FC = () => {
           bordered={false}
           className={styles.tokenCard}
         >
-          {accessToken ? (
+          {mail && name ? (
             <>
-              <Paragraph>
-                <Text strong>Your Access Token:</Text>
-              </Paragraph>
-              <Paragraph
-                copyable={{
-                  text: accessToken,
-                  tooltips: ['Copy token', 'Token copied'],
-                  icon: <CopyOutlined />,
-                }}
-                className={styles.tokenBox}
-              >
-                <Text code>{accessToken}</Text>
-              </Paragraph>
+              Hi {name}! Welcome to Time sheet portal.
             </>
           ) : (
-            <Text type="danger">No access token found in cookies.</Text>
+            <Text type="danger">User is Not authenticated</Text>
           )}
         </Card>
       </Content>

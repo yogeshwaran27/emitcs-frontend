@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Checkbox, Typography, Card, message } from 'antd';
+import { Form, Input, Button, Typography, Card, message } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import LoginBg from '../assets/LoginBg.jpg';
 import axiosInstance from '../api/interceptor';
 import { useNavigate } from 'react-router-dom';
 import styles from '../styles/LoginForm.module.scss';
+import { useUser } from '../context/UserContext';
 
 const { Title, Text } = Typography;
 
 const LoginForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  const { setUser } = useUser();
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
@@ -28,6 +29,19 @@ const LoginForm: React.FC = () => {
 
       if (response.data.message === 'success') {
         message.success('Login successful!');
+        const fetchUser = async () => {
+            try {
+              const res = await axiosInstance('/auth/me');
+              if (res.status == 200) {
+                const data = await res.data;
+                setUser({ mail: data.mail, name: data.name });
+              }
+            } catch (error) {
+              console.error('Auth check failed', error);
+            }
+          };
+
+          fetchUser();
         setTimeout(() => {
           navigate('/timesheet');
         }, 100);
