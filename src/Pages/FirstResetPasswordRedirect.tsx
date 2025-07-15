@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import { message } from 'antd';
+import axiosInstance from '../api/interceptor'; // Update path if necessary
 
 const FirstResetPassRedirect: React.FC = () => {
     const navigate = useNavigate();
@@ -10,25 +10,38 @@ const FirstResetPassRedirect: React.FC = () => {
     useEffect(() => {
         const token = searchParams.get('token');
         const email = searchParams.get('email');
-        Cookies.remove('access_token');
-        Cookies.remove('email');
-        Cookies.remove('access_token', { path: '/' });
-        Cookies.remove('email', { path: '/' });
+
         if (!token || !email) {
-            console.log("herererer")
             message.error('Invalid password reset link.');
             navigate('/login');
             return;
         }
-        console.log(token,email)    
-        const oneHourFromNow = new Date(new Date().getTime() + 60 * 60 * 1000);
-        Cookies.set('access_token', token, { expires: oneHourFromNow }); 
-        Cookies.set('email', email, { expires: oneHourFromNow });
 
-        navigate('/reset-password');
+        const validateResetToken = async () => {
+            try {
+                const response = await axiosInstance.post('/auth/reset-token-store', {
+                    token,
+                    email,
+                });
+
+                if (response.status === 200) {
+                    navigate('/reset-password');
+                } else {
+                    message.error('Token validation failed.');
+                    navigate('/login');
+                }
+            } catch (error: any) {
+                message.error(
+                    error?.response?.data?.message || 'Failed to validate reset token.'
+                );
+                navigate('/login');
+            }
+        };
+
+        validateResetToken();
     }, [navigate, searchParams]);
 
-    return null; 
+    return null;
 };
 
 export default FirstResetPassRedirect;

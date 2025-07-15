@@ -1,8 +1,10 @@
 // src/api/axiosInstance.ts
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import {apiURL} from "../constants/constants"
 const axiosInstance = axios.create({
-  baseURL: '/api',
+  // baseURL: "/api",
+  baseURL: apiURL,
   headers: {
     'Content-Type': 'application/json',
   },
