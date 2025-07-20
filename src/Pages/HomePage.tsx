@@ -8,7 +8,7 @@ const { Title, Text } = Typography;
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const { mail } = useUser();
+  const { mail,company } = useUser();
 
   return (
     <div className={styles.container}>
@@ -44,7 +44,7 @@ const HomePage: React.FC = () => {
               <Button
                 type="primary"
                 size="large"
-                onClick={() => navigate('/timesheet')}
+                onClick={() => navigate(`/${company}/timesheet`)}
               >
                 Go to Time Sheet Portal
               </Button>

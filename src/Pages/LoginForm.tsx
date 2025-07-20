@@ -12,7 +12,7 @@ const { Title, Text } = Typography;
 const LoginForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { setUser,company } = useUser();
+  const { setUser } = useUser();
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
@@ -30,21 +30,22 @@ const LoginForm: React.FC = () => {
       if (response.data.message === 'success') {
         message.success('Login successful!');
         const fetchUser = async () => {
-            try {
-              const res = await axiosInstance('/auth/me');
-              if (res.status == 200) {
-                const data = await res.data;
-                setUser({ mail: data.mail, name: data.name, company: data.company });
-              }
-            } catch (error) {
-              console.error('Auth check failed', error);
+          try {
+            const res = await axiosInstance('/auth/me');
+            if (res.status == 200) {
+              const data = await res.data;
+              setUser({ mail: data.mail, name: data.name, company: data.company, companyURL: data.companyURL });
+              setTimeout(() => {
+                navigate(`/${res.data.company}/timesheet`);
+              }, 100);
             }
-          };
+          } catch (error) {
+            console.error('Auth check failed', error);
+          }
+        };
 
-          fetchUser();
-        setTimeout(() => {
-          navigate(`/${response.data.company}/timesheet`);
-        }, 100);
+        fetchUser();
+
       }
     } catch (error: any) {
       console.error('Login failed:', error);

@@ -21,7 +21,7 @@ const AuthLoader = ({ children }: { children: JSX.Element }) => {
         const res = await axiosInstance('/auth/me');
         if (res.status === 200) {
           const data = await res.data;
-          setUser({ mail: data.mail, name: data.name, company: data.company });
+          setUser({ mail: data.mail, name: data.name, company: data.company,companyURL:data.companyURL });
 
           if (location.pathname === '/' && data.company) {
             navigate(`/${data.company}/timesheet`);
@@ -33,7 +33,7 @@ const AuthLoader = ({ children }: { children: JSX.Element }) => {
     };
 
     fetchUser();
-  }, [setUser, navigate, location.pathname]);
+  }, []);
 
   return children;
 };

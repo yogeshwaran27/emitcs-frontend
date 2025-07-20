@@ -10,11 +10,15 @@ const { Header } = Layout;
 
 const HeaderBar: React.FC = () => {
   const navigate = useNavigate();
-  const { name,setUser,company } = useUser();
-
+  const { name,setUser,company,companyURL } = useUser();
+  
+  const handleLogoClick=()=>{
+    navigate("/")
+  }
+  
   const handleLogout = async () => {
     try {
-      setUser({ mail: null, name: null, company:null });
+      setUser({ mail: null, name: null, company:null,companyURL:null });
       await axiosInstance.post('/auth/logout');
       message.success('Logged out successfully');
       navigate('/login');
@@ -41,7 +45,13 @@ const HeaderBar: React.FC = () => {
 
   return (
     <Header className={styles.headerBar}>
-      <div style={{ fontWeight: 'bold', fontSize: 18 }}>EMITCS Portal</div>
+      <div style={{ fontWeight: 'bold', fontSize: 18 }} onClick={handleLogoClick}>
+         {(companyURL && companyURL !== "") ? (
+          <img src={companyURL} alt="Company Logo" style={{ height: '30px', cursor: 'pointer' }} />
+        ) : (
+          <div style={{ fontWeight: 'bold', fontSize: 18 }}>EMITCS Portal</div>
+        )}
+        </div>
       {name && (
         <Dropdown overlay={menu} trigger={['click']}>
           <Avatar style={{ backgroundColor: '#1890ff', cursor: 'pointer' }}>

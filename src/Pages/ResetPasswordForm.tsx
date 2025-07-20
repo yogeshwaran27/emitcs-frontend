@@ -17,7 +17,8 @@ const ResetPasswordForm: React.FC= () => {
   const [loading, setLoading] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
   const location = useLocation();
-  const firstTimeReset=location.state.firstTimeReset || false ;
+  
+  const firstTimeReset  = location.state? location.state.firstTimeReset :false
   const { mail } = useUser();
   const [password, setPassword] = useState('');
   const [oldPassword, setOldPassword] = useState('');
@@ -55,6 +56,7 @@ const ResetPasswordForm: React.FC= () => {
     try {
       const payload: any = {
         newPassword: password,
+        firstTimeReset
       };
 
       if (!firstTimeReset) {
@@ -64,7 +66,7 @@ const ResetPasswordForm: React.FC= () => {
       await axiosInstance.put('/users/reset-password', payload);
 
       message.success('Password updated successfully. Please log in.');
-      navigate('/login');
+      navigate('/');
     } catch (error) {
       console.error('Password reset failed:', error);
       message.error('Failed to reset password. Please try again.');
@@ -85,7 +87,7 @@ const ResetPasswordForm: React.FC= () => {
           
 
           <Form layout="vertical" onFinish={onFinish}>
-            {!firstTimeReset && (
+            {firstTimeReset==false && (
             <Form.Item
               label="Old Password"
               name="oldPassword"
@@ -179,7 +181,7 @@ const ResetPasswordForm: React.FC= () => {
                 htmlType="submit"
                 block
                 loading={loading}
-                disabled={loading || !isPasswordStrong || (password != confirmPassword)}
+                disabled={loading || !isPasswordStrong || (password != confirmPassword) || (firstTimeReset==false && oldPassword=="")}
               >
                 Update Password
               </Button>
