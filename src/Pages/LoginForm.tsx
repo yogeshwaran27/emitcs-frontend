@@ -12,7 +12,7 @@ const { Title, Text } = Typography;
 const LoginForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { setUser } = useUser();
+  const { setUser,company } = useUser();
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
@@ -23,7 +23,7 @@ const LoginForm: React.FC = () => {
 
       if (response.data.requiresPasswordReset) {
         message.warning('Password reset required!');
-        navigate('/reset-password');
+        navigate(`/${response.data.company}/reset-password`);
         return;
       }
 
@@ -34,7 +34,7 @@ const LoginForm: React.FC = () => {
               const res = await axiosInstance('/auth/me');
               if (res.status == 200) {
                 const data = await res.data;
-                setUser({ mail: data.mail, name: data.name });
+                setUser({ mail: data.mail, name: data.name, company: data.company });
               }
             } catch (error) {
               console.error('Auth check failed', error);
@@ -43,7 +43,7 @@ const LoginForm: React.FC = () => {
 
           fetchUser();
         setTimeout(() => {
-          navigate('/timesheet');
+          navigate(`/${response.data.company}/timesheet`);
         }, 100);
       }
     } catch (error: any) {

@@ -10,11 +10,11 @@ const { Header } = Layout;
 
 const HeaderBar: React.FC = () => {
   const navigate = useNavigate();
-  const { name,setUser } = useUser();
+  const { name,setUser,company } = useUser();
 
   const handleLogout = async () => {
     try {
-      setUser({ mail: null, name: null });
+      setUser({ mail: null, name: null, company:null });
       await axiosInstance.post('/auth/logout');
       message.success('Logged out successfully');
       navigate('/login');
@@ -25,7 +25,7 @@ const HeaderBar: React.FC = () => {
   };
 
   const handleResetPassword = () => {
-    navigate('/reset-password');
+    navigate(`/${company}/reset-password`);
   };
 
   const menu = (

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Layout, Typography, Card } from 'antd';
-import { CopyOutlined } from '@ant-design/icons';
 import HeaderBar from '../components/HeaderBar';
 import styles from '../styles/Timesheet.module.scss';
 import { useUser } from '../context/UserContext';

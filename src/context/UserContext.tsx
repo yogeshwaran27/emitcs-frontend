@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState } from 'react';
 interface User {
   mail: string | null;
   name: string | null;
+  company:string | null;
 }
 
 interface UserContextType extends User {
@@ -13,13 +14,14 @@ interface UserContextType extends User {
 const UserContext = createContext<UserContextType>({
   mail: null,
   name: null,
+  company: null,
   setUser: () => {},
 });
 
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User>({ mail: null, name: null });
+  const [user, setUser] = useState<User>({ mail: null, name: null ,company:null});
 
   return (
     <UserContext.Provider value={{ ...user, setUser }}>

@@ -7,16 +7,20 @@ import styles from '../styles/ResetPasswordForm.module.scss';
 import HeaderBar from '../components/HeaderBar';
 import { Content } from 'antd/es/layout/layout';
 import { useUser } from '../context/UserContext';
+import { useLocation } from 'react-router-dom';
+
 
 const { Title, Text } = Typography;
 
-const ResetPasswordForm: React.FC = () => {
+const ResetPasswordForm: React.FC= () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
-
+  const location = useLocation();
+  const firstTimeReset=location.state.firstTimeReset || false ;
   const { mail } = useUser();
   const [password, setPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
 
   const passwordValidations = [
     {
@@ -49,7 +53,15 @@ const ResetPasswordForm: React.FC = () => {
     setLoading(true);
 
     try {
-      await axiosInstance.put('/users/reset-password', {newPassword: password});
+      const payload: any = {
+        newPassword: password,
+      };
+
+      if (!firstTimeReset) {
+        payload.oldPassword = oldPassword;
+      }
+
+      await axiosInstance.put('/users/reset-password', payload);
 
       message.success('Password updated successfully. Please log in.');
       navigate('/login');
@@ -70,8 +82,28 @@ const ResetPasswordForm: React.FC = () => {
             <Title level={4}>Reset Password</Title>
             <Text type="secondary">Set a new password for your account</Text>
           </div>
+          
 
           <Form layout="vertical" onFinish={onFinish}>
+            {!firstTimeReset && (
+            <Form.Item
+              label="Old Password"
+              name="oldPassword"
+              rules={[{ required: true, message: 'Please enter your old password!' }]}
+            >
+              <>
+                <Input.Password
+                  placeholder="Old Password"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  iconRender={(visible) =>
+                    visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                  }
+                />
+              </>
+
+            </Form.Item>
+          )}
             <Form.Item
               label="New Password"
               name="password"
