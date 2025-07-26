@@ -46,6 +46,7 @@ const ResetPasswordForm: React.FC= () => {
   }
 
   const onFinish = async (values: any) => {
+    console.log(values)
     if (password !== confirmPassword) {
       message.error('Passwords do not match');
       return;
@@ -149,7 +150,7 @@ const ResetPasswordForm: React.FC= () => {
 
               rules={[
                 {
-                  validator: (_, value, callback) => {
+                  validator: (_, value) => {
                     if (!password) {
                       return Promise.resolve();
                     }

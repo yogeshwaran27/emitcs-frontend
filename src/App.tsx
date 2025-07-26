@@ -11,7 +11,7 @@ import './App.scss';
 import axiosInstance from './api/interceptor';
 
 const AuthLoader = ({ children }: { children: JSX.Element }) => {
-  const { setUser, company } = useUser();
+  const { setUser } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
 
