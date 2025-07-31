@@ -6,10 +6,11 @@ import HomePage from './Pages/HomePage';
 import ResetPasswordForm from './Pages/ResetPasswordForm';
 import FirstResetPassRedirect from './Pages/FirstResetPasswordRedirect';
 import NotFoundPage from './Pages/NotFoundPage';
-import TimesheetPage from './Pages/Timesheet';
-import './App.scss';
+import Dashboard from './Pages/Dashboard';
+import './App.css';
 import axiosInstance from './api/interceptor';
-
+import Projects from './Pages/Projects';
+import { ConfigProvider } from 'antd';
 const AuthLoader = ({ children }: { children: JSX.Element }) => {
   const { setUser } = useUser();
   const navigate = useNavigate();
@@ -60,20 +61,28 @@ const PublicRoute = ({ children }: { children: JSX.Element }) => {
 function App() {
   return (
     <UserProvider>
+        <ConfigProvider
+          theme={{
+            token: {
+              fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", 
+              colorPrimary: "#262626"
+            },
+          }}
+        >
       <Router>
         <AuthLoader>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={ <HomePage/>} />
             <Route path="/login" element={<PublicRoute><LoginForm /></PublicRoute>} />
             <Route path="/first-reset-pass" element={<FirstResetPassRedirect />} />
-
-            <Route path="/:company/timesheet" element={<ProtectedRoute><TimesheetPage /></ProtectedRoute>} />
+            <Route path="/:company/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/:company/project" element={<ProtectedRoute><Projects/></ProtectedRoute>} />
             <Route path="/:company/reset-password" element={<ProtectedRoute><ResetPasswordForm /></ProtectedRoute>} />
-
             <Route path="*" element={<PublicRoute><NotFoundPage /></PublicRoute>} />
           </Routes>
         </AuthLoader>
       </Router>
+      </ConfigProvider>
     </UserProvider>
   );
 }

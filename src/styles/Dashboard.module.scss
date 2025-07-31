@@ -1,0 +1,101 @@
+.projectTimesheetContainer {
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+
+.backBtn {
+    background-color: #fff !important;
+    color: #000 !important;
+    border: none;
+    font-weight: 500;
+    border: 1px solid #666;
+  }
+
+  .backBtn:hover,
+  .backBtn:focus {
+    background-color: #d8d8d8 !important;
+    color: #000 !important;
+  }
+
+.TimesheetCardContainer{
+  display:flex;
+  flex-direction: column;
+  gap:15px;
+  border-radius:8px;
+  padding: 15px;
+  background-color: #fff;
+  border: 0.5px solid #eee;
+}
+.RecentProject{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.timesheetCard{
+  width: 100%;
+  .CardKPI{
+    font-size:20px;
+  }
+  p{
+    font-size:smaller;
+    margin: 0;
+  }
+}
+
+.CardContainer{
+  display:flex;
+  gap:15px;
+  justify-content: space-between;
+  padding-bottom: 15px;
+}
+.timesheetKPI{
+  text-align: right;
+}
+.timesheetStatus{
+  margin-inline-end:8px;
+  .timesheetStatusKPI{
+    margin-right: 15px;
+  }
+}
+.totalHours{
+  margin-right: 15px;
+}
+.timesheetInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    margin: 0;
+  }
+
+  p {
+    margin: 2px 0;
+    color: #666;
+  }
+}
+
+.timesheetStatus {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+
+  div {
+    min-width: 120px;
+  }
+
+  .blackButton {
+    background-color: #000 !important;
+    color: #fff !important;
+    border: none;
+  }
+
+  .blackButton:hover,
+  .blackButton:focus {
+    background-color: #333 !important;
+    color: #fff !important;
+  }
+}

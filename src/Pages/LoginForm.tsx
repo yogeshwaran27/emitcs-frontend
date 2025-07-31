@@ -36,7 +36,7 @@ const LoginForm: React.FC = () => {
               const data = await res.data;
               setUser({ mail: data.mail, name: data.name, company: data.company, companyURL: data.companyURL });
               setTimeout(() => {
-                navigate(`/${res.data.company}/timesheet`);
+                navigate(`/${res.data.company}/dashboard`);
               }, 100);
             }
           } catch (error) {
